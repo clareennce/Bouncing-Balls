@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bouncing Balls</title>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+    canvas {
+        display: block;
+        background-color:rgb(109, 116, 122)
+    }
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Ball constructor function
+    function Ball(x, y, dx, dy, radius, color) {
+        this.x = x;
+        this.y = y;
+        this.dx = dx;
+        this.dy = dy;
+        this.radius = radius;
+        this.color = color;
+    }
+
+    // Method to draw the ball
+    Ball.prototype.draw = function() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    // Method to update the ball's position and check for collisions
+    Ball.prototype.update = function() {
+        if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+            this.dx = -this.dx;
+        }
+        if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+            this.dy = -this.dy;
+        }
+
+        this.x += this.dx;
+        this.y += this.dy;
+
+        this.draw();
+    }
+
+    // Initialize 5 balls
+    const balls = [
+        new Ball(600, 75, -8, 2, 50, 'green'),
+        new Ball(200, 200, -5, 3, 30, 'red'),
+        new Ball(300, 150, -8, -2, 60, 'white'),
+        new Ball(500, 300, -7, -3, 60, 'brown'),
+        new Ball(160, 400, -13, 1, 64, 'yellow'),
+        new Ball(621, 550, -10, -5, 65, 'blue'),
+        new Ball(105, 430, -10, -8, 55, 'skyblue'),
+        new Ball(205, 430, -9, -3, 40, 'aquamarine'),
+        new Ball(420, 430, -6, -9, 35, 'violet'),
+        new Ball(150, 430, -11, -6, 25, 'black'),
+        new Ball(500, 430, -6, -10, 45, 'burlywood'),
+    ];
+
+    // Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        balls.forEach(ball => {
+            ball.update();
+        });
+    }
+
+    animate();
+</script>
+</body>
+</html>
